@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         minlength:[3,'Last name atleast 3 charaters long'],
     }
    },
-   emil:{
+   email:{
     type:String,
     required:true,
     unique:true,
@@ -35,7 +35,7 @@ userSchema.methods.generateAuthToken = function(){
     return token;
 }
 
-userSchema.methods.comparePassword = async function(){
+userSchema.methods.comparePassword = async function(password){
     return await bcrypt.compare(password,this.password);
 }
 
