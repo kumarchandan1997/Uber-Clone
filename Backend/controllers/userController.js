@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 const userService = require('../services/userService');
 const {validationResult} = require('express-validator');
+const BlacklistToken = require('../models/blacklistTokenModel');
 
 module.exports.registerUser = async (req,res,next) =>{
 
@@ -66,4 +67,13 @@ module.exports.userLogin = async (req,res,next) =>{
 
 module.exports.getUserProfile = async (req,res,next) =>{
     res.status(200).json(req.user);
+}
+
+module.exports.userLogout = async (req,res,next) =>{
+  res.clearCookie('token');
+  const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+
+  await BlacklistToken.create({token});
+
+  res.status(200).json({message:'Logout successfully !'});
 }
